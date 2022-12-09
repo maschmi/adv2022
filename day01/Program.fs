@@ -2,7 +2,6 @@
 
 open System.Diagnostics
 open Microsoft.FSharp.Core
-open utils
 let inFile = "day01/input-01.txt" 
 
 
