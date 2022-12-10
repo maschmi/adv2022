@@ -31,14 +31,14 @@ let findMax list =
     |> Seq.maxBy snd
 
 let printMax file = 
-    utils.Input.readLines file
+    utils.Input.readAllLines file
             |> List.ofArray
             |> splitBy ""
             |> findMax
             |> printfn "Max calories %A" 
 
 let sumTop file n = 
-    utils.Input.readLines file
+    utils.Input.readAllLines file
             |> List.ofArray
             |> splitBy ""
             |> List.sortDescending

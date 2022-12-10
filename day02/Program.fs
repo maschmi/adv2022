@@ -109,7 +109,7 @@ let calculateNeededSymbols game =
 let part1Split = splitLine convertSymbols
 
 let part1 inFile = 
-    utils.Input.readLines inFile
+    utils.Input.readAllLines inFile
         |> List.ofArray
         |> List.map part1Split  
         |> List.map calcScore
@@ -118,7 +118,7 @@ let part1 inFile =
 
 let part2Split = splitLine convertSymbolAndOutcome
 let part2 inFile =
-    utils.Input.readLines inFile
+    utils.Input.readAllLines inFile
         |> List.ofArray
         |> List.map part2Split 
         |> List.map calculateNeededSymbols

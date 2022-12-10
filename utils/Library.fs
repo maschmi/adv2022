@@ -4,8 +4,11 @@ open System.IO
 
 module Input =
     let rootPath = "/home/martin/src/AdventOfCode2022"
-    let readLines file =
+    let readAllLines file =
         File.ReadAllLines $"{rootPath}/{file}"
+        
+    let readLines file =
+        File.ReadLines $"{rootPath}/{file}"
         
 module ListUtils =
     let splitBy v list =
