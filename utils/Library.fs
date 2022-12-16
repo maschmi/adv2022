@@ -7,8 +7,8 @@ module Input =
     let readAllLines file =
         File.ReadAllLines $"{rootPath}/{file}"
         
-    let readLines file =
-        File.ReadLines $"{rootPath}/{file}"
+    let readLines (file: string) = 
+        File.ReadLines $"{rootPath}/{file}"        
         
 module ListUtils =
     let splitBy v list =
