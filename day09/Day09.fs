@@ -90,8 +90,18 @@ let rec moveTailStepByStep (heads: Coordinates list) (currentTail: Coordinates) 
                       | true -> currentTail                                   
                       | false -> moveTail currentTail head
         moveTailStepByStep tail newTail (newTail::tailPositions)
-    
-let calculateTailPositions line =    
+
+let rec simulate knotCount (precedingKnots: Coordinates list)   =
+    match knotCount with
+    // we reached the end, return the result 
+    | x when x = 0 -> precedingKnots
+    | _ ->
+        //take the precedingKnots positions, reverse them as we did use new::[old] and we want to start at the beginning
+        //every knot starts at (0,0)
+        let knotPositions = moveTailStepByStep (precedingKnots |> List.rev) (Coordinates(0,0)) []
+        simulate (knotCount - 1) knotPositions 
+
+let calculateTailPositions knotCount line =    
     let rec move currentHead currentTailPos line (positions: Coordinates list) = 
         match line with
         | [] -> positions
@@ -101,19 +111,38 @@ let calculateTailPositions line =
             move (newHeads |> List.last) visitedTailPositions[0] tail (visitedTailPositions @ positions)
     
     let start = Coordinates(0,0)
+    
+    // we simulate thew first two knots as the initial value, so we remove the first two 
+    let knotsToSimulate = knotCount - 2
+    
+    //calculate first pair of (like in part1)
     move start start line []
-
-
-let part1 file =
+    //calculate remaining knots positions
+    |> simulate knotsToSimulate
     
-    
+let calculateTwoKnotsRope movements =
+    calculateTailPositions 2 movements
+
+let calculateTenKnotsRope movements =
+    calculateTailPositions 10 movements
+
+let calculate rope file =
     file
     |> utils.Input.readLines
     |> Seq.toList
-    |> calculateTailPositions
+    |> rope
     |> List.distinct
     |> List.length
     |> printfn "Total position the tail was on: %A"
+
+
+let part1 file =
+    let calculator = calculate calculateTwoKnotsRope
+    file |> calculator
     
+let part2 file =
+    let calculator = calculate calculateTenKnotsRope
+    file |> calculator
+
 part1 "day09/input.txt"
-   
+part2 "day09/input.txt"
