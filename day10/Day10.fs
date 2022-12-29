@@ -3,7 +3,7 @@
 
 let cyclesOfInterest = [20; 60; 100; 140; 180; 220]
 
-let (maxCycles: int) = 6 * 40 
+let (maxCycles: int) = 6 * 40 + 10
 
 type Command =
     | NOOP of int
@@ -19,21 +19,49 @@ let parseCommand (line: string) =
     | "noop" ->  noop
     | "addx" ->  addx (cmd[1] |> int)
     | _ -> failwith "unknown oppcode"
+
+
+let calculatePixel sprite pixelPos  =
+    match sprite |> List.contains pixelPos with
+    | true -> "#"
+    | false -> "."
+
+let calcSprite registerValue =
+     [registerValue - 1; registerValue; registerValue + 1]
+
+let getPixelPos cycle =
+    match (cycle % 40) with
+    | 0 -> 39
+    | x -> x - 1
+
+let addNewLine pixelPos pixel =
+    match pixelPos with
+    | 39 -> pixel + "\n"
+    | _ -> pixel
+
+let outputPipe sprite register =
+    register.cycle
+    |> getPixelPos
+    |> calculatePixel sprite
+    |> addNewLine (register.cycle |> getPixelPos)
+    |> printf "%s"
   
 let rec executeCommand (registerInCycle: RegisterValue) command: RegisterValue list= [
-    let cycle = registerInCycle.cycle
+    let cycle = registerInCycle.cycle + 1
     let value = registerInCycle.value
+    //this does not feel nice as the I/O is hidden somwhere, but it does the trick
+    registerInCycle |> (value |> calcSprite |> outputPipe) 
     match command with
-    | NOOP(leftCycles) when leftCycles = 1 -> yield { cycle = cycle + 1; value =  value }
-    | ADDX(leftCycles, x) when leftCycles = 1 -> yield { cycle = cycle + 1; value =  value + x }
+    | NOOP(leftCycles) when leftCycles = 1 -> yield { cycle = cycle; value =  value }  
+    | ADDX(leftCycles, x) when leftCycles = 1 -> yield { cycle = cycle; value =  value + x } 
     | NOOP(leftCycles) ->
-        let noopCycle = {  cycle = cycle + 1; value =  value } 
+        let noopCycle = {  cycle = cycle; value =  value } 
         yield  noopCycle
-        yield! executeCommand { cycle = cycle + 1; value =  value } (NOOP(leftCycles - 1))
+        yield! executeCommand { cycle = cycle; value =  value } (NOOP(leftCycles - 1))
     | ADDX(leftCycles,x) ->
-        let noopCycle = {  cycle = cycle + 1; value =  value } 
+        let noopCycle = {  cycle = cycle; value =  value } 
         yield  noopCycle
-        yield! executeCommand { cycle = cycle + 1; value =  value } (ADDX(leftCycles - 1, x))
+        yield! executeCommand { cycle = cycle; value =  value } (ADDX(leftCycles - 1, x))
     ]
 
     
@@ -54,17 +82,6 @@ let readCommands commandSeq =
     nextCommand commandSeq [ { cycle = 1; value = 1 } ]
 
 
-let calculatePixel sprite pixelPos  =
-    match sprite |> List.contains pixelPos with
-    | true -> "#"
-    | false -> "."
-
-let calcSprite registerValue =
-     [registerValue - 1, registerValue, registerValue + 1]
-
-let getPixelPos cycle =
-    cycle % 40
-
 let rec extractValueDuringDefinedCycles (definedCycles: int list) (values: RegisterValue list) (input: RegisterValue list) =
     match definedCycles with
     |  [] -> values
@@ -78,7 +95,7 @@ let rec extractValueDuringDefinedCycles (definedCycles: int list) (values: Regis
 let calculateSignalStrength input =
     input.cycle * input.value
     
-let part1 file =
+let day10 file =
     utils.Input.readLines file
     |> readCommands
     |> extractValueDuringDefinedCycles cyclesOfInterest []
@@ -86,4 +103,4 @@ let part1 file =
     |> List.sum
     |> printfn "Total sum of all signal strengths:  %A"
 
-part1 "day10/input.txt"
+day10 "day10/input.txt"
