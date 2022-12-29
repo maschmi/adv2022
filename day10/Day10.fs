@@ -3,7 +3,7 @@
 
 let cyclesOfInterest = [20; 60; 100; 140; 180; 220]
 
-let (maxCycles: int) = cyclesOfInterest |> List.last 
+let (maxCycles: int) = 6 * 40 
 
 type Command =
     | NOOP of int
@@ -52,7 +52,18 @@ let readCommands commandSeq =
         | _ -> failwith "todo"
         
     nextCommand commandSeq [ { cycle = 1; value = 1 } ]
-        
+
+
+let calculatePixel sprite pixelPos  =
+    match sprite |> List.contains pixelPos with
+    | true -> "#"
+    | false -> "."
+
+let calcSprite registerValue =
+     [registerValue - 1, registerValue, registerValue + 1]
+
+let getPixelPos cycle =
+    cycle % 40
 
 let rec extractValueDuringDefinedCycles (definedCycles: int list) (values: RegisterValue list) (input: RegisterValue list) =
     match definedCycles with
