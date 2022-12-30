@@ -3,7 +3,7 @@
 open System.IO
 
 module Input =
-    let rootPath = "/home/martin/src/AdventOfCode2022"
+    let rootPath = "/home/martin/RiderProjects/adv2022"
     let readAllLines file =
         File.ReadAllLines $"{rootPath}/{file}"
         
