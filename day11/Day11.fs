@@ -65,9 +65,7 @@ let rec playPart1 roundsToPlay monkeys =
                  |> playPart1 tail
 
 let normalizeWorryLevel gcd worryLevel =
-    match worryLevel % gcd with
-    | 0UL -> gcd
-    | x -> x
+    worryLevel % gcd
                     
 let rec playPart2 roundsToPlay gcd monkeys =
     let normalizeWorryLevelByGCD = normalizeWorryLevel gcd
@@ -101,7 +99,7 @@ playPart1 [1..20] PuzzleMonkeys.monkeys
 |> printfn "Total monkey business %d"
 *)
 
-playPart2 [1..10000] (TestMonkeys.monkeys |> getGCD) TestMonkeys.monkeys
+playPart2 [1..10000] (PuzzleMonkeys.monkeys |> getGCD) PuzzleMonkeys.monkeys
 |> calculateMonkeyBusiness 
 |> printfn "Total monkey business %d - expected for test 2713310158"
         

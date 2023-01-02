@@ -60,6 +60,6 @@ let monkey3 = Monkey([86;61;67;88;94;69;56;91] |> toUnitList, testMonkey3Operati
 let monkey4 = Monkey([76;50;51] |> toUnitList, testMonkey4Operation, 19UL, testMonkey4Decision, 0UL)
 let monkey5 = Monkey([77;76] |> toUnitList, testMonkey5Operation, 17UL, testMonkey5Decision, 0UL)
 let monkey6 = Monkey([74UL], testMonkey6Operation, 5UL, testMonkey6Decision, 0UL)
-let monkey7 = Monkey([67;85;52;86;91;95] |> toUnitList, testMonkey7Operation, 7UL, testMonkey7Decision, 0UL)
+let monkey7 = Monkey([86;85;52;86;91;95] |> toUnitList, testMonkey7Operation, 7UL, testMonkey7Decision, 0UL)
 
 let monkeys = [monkey0; monkey1; monkey2; monkey3; monkey4; monkey5; monkey6; monkey7]
